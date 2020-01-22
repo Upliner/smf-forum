@@ -1,7 +1,9 @@
-*.php~
-Packages
+Packages/
+attachments/
+avatars/
+cache/
+upldata/
 Settings*.php
-attachments
-avatars
-cache
 install*
+*.php~
+/*.jpg
