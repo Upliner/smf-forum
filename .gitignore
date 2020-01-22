@@ -1,5 +1,6 @@
+*.php~
 Packages
-Settings*
+Settings*.php
 attachments
 avatars
 cache
