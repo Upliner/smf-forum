@@ -537,5 +537,16 @@ function expandThumb(thumbID)
 	link.href = tmp;
 	img.style.width = '';
 	img.style.height = '';
+	img.onload = function () {
+		divWidth = parseFloat(getComputedStyle(img.parentNode.parentNode).width);
+		if (img.naturalWidth > divWidth) {
+			ratio = img.height/img.width;
+			img.width  = divWidth;
+			img.height = img.width*ratio;
+		} else {
+			img.width  = img.naturalWidth;
+			img.height = img.naturalHeight;
+		}
+	}
 	return false;
 }

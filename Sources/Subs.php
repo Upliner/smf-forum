@@ -1714,6 +1714,9 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 	$open_tags = array();
 	$message = strtr($message, array("\n" => '<br />'));
 
+	// Embed YouTube URLs in the YouTube bbcode tags:
+	BBCode_YouTube_Embed($message, $smileys, $cache_id, $parse_tags);
+
 	// The non-breaking-space looks a bit different each time.
 	$non_breaking_space = $context['utf8'] ? ($context['server']['complex_preg_chars'] ? '\x{A0}' : "\xC2\xA0") : '\xA0';
 
@@ -2070,7 +2073,10 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 
 				// Okay, this may look ugly and it is, but it's not going to happen much and it is the best way of allowing any order of parameters but still parsing them right.
 				$match = false;
-				$orders = permute($preg);
+				if (in_array($possible['tag'], array('youtube', 'yt', 'yt_user', 'yt_search')))
+					$orders = array(BBCode_YouTube_Params($message, $pos1, $possible['parameters']) ? $preg : array());
+				else
+					$orders = permute($preg);
 				foreach ($orders as $p)
 					if (preg_match('~^' . implode('', $p) . '\]~i', substr($message, $pos1 - 1), $matches) != 0)
 					{

@@ -2447,6 +2447,8 @@ function modifyPost(&$msgOptions, &$topicOptions, &$posterOptions)
 		'id_msg' => $msgOptions['id'],
 	);
 
+	YASM_Insert_Spoiler_ID($messages_columns, $update_parameters, $msgOptions, $topicOptions, $posterOptions, $messageInts);
+
 	foreach ($messages_columns as $var => $val)
 	{
 		$messages_columns[$var] = $var . ' = {' . (in_array($var, $messageInts) ? 'int' : 'string') . ':var_' . $var . '}';

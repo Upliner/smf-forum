@@ -192,6 +192,7 @@ function Who()
 		$context['members'][$row['session']] = array(
 			'id' => $row['id_member'],
 			'ip' => allowedTo('moderate_forum') ? $row['ip'] : '',
+			'user_agent' => $actions["USER_AGENT"],
 			// It is *going* to be today or yesterday, so why keep that information in there?
 			'time' => strtr(timeformat($row['log_time']), array($txt['today'] => '', $txt['yesterday'] => '')),
 			'timestamp' => forum_time(true, $row['log_time']),

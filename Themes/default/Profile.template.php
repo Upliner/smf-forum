@@ -1516,6 +1516,13 @@ function template_profile_theme_settings()
 								<label for="view_newest_first"><input type="checkbox" name="default_options[view_newest_first]" id="view_newest_first" value="1"', !empty($context['member']['options']['view_newest_first']) ? ' checked="checked"' : '', ' class="input_check" /> ', $txt['recent_posts_at_top'], '</label>
 							</li>';
 
+	// Added to allow the user the option to not embed a YouTube video
+	echo '
+							<li>
+								<input type="hidden" name="default_options[youtube_no_embed]" value="0" />
+								<label for="youtube_no_embed"><input type="checkbox" name="default_options[youtube_no_embed]" id="youtube_no_embed" value="1"', !empty($context['member']['options']['youtube_no_embed']) ? ' checked="checked"' : '', ' class="input_check" /> ', $txt['youtube_no_embed'], '</label>
+							</li>';
+
 	// Choose WYSIWYG settings?
 	if (empty($modSettings['disable_wysiwyg']))
 		echo '

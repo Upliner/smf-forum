@@ -750,4 +750,10 @@ $txt['debug_query_which_took_at'] = 'which took %1$s seconds at %2$s into reques
 $txt['debug_show_queries'] = '[Show Queries]';
 $txt['debug_hide_queries'] = '[Hide Queries]';
 
+$txt['youtube'] = 'Youtube';
+$txt['yt_search'] = 'YouTube Search';
+$txt['yt_user'] = 'YouTube User';
+$txt['youtube_link_invalid'] = '[ Invalid YouTube link ]';
+$txt['youtube_no_embed'] = 'Show YouTube videos as a link.';
+
 ?>

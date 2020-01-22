@@ -66,6 +66,18 @@ function Display()
 	global $options, $sourcedir, $user_info, $board_info, $topic, $board;
 	global $attachments, $messages_request, $topicinfo, $language, $smcFunc;
 
+	if (substr($_REQUEST['start'], 0, 3) == 'msg' && !isset($_REQUEST['topicseen']) && !isset($_REQUEST['boardseen']) && !isset($_REQUEST['forcetopic']))
+	{
+		$request = $smcFunc['db_query']('', '
+		SELECT id_topic FROM {db_prefix}messages WHERE id_msg = {int:virtual_msg}',
+			array('virtual_msg' => (int) substr($_REQUEST['start'], 3)));
+		$row = $smcFunc['db_fetch_row']($request);
+		if ($row && $row[0] > 0) {
+			$topic = $row[0];
+		}
+		//$topic=174;
+		$smcFunc['db_free_result']($request);
+	}
 	// What are you gonna display if these are empty?!
 	if (empty($topic))
 		fatal_lang_error('no_board', false);
@@ -1161,6 +1173,9 @@ function prepareDisplayContext($reset = false)
 	}
 
 	$memberContext[$message['id_member']]['ip'] = $message['poster_ip'];
+
+	// If so requested, add a logging ID to any YASM tag:
+	YASM_preparse($message);
 
 	// Do the censor thang.
 	censorText($message['body']);
