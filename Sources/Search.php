@@ -778,8 +778,8 @@ function PlushSearch2()
 	if ($context['show_spellchecking'])
 	{
 		// Windows fix.
-		ob_start();
-		$old = error_reporting(0);
+		//ob_start();
+		//$old = error_reporting(0);
 
 		pspell_new('en');
 		$pspell_link = pspell_new($txt['lang_dictionary'], $txt['lang_spelling'], '', strtr($txt['lang_character_set'], array('iso-' => 'iso', 'ISO-' => 'iso')), PSPELL_FAST | PSPELL_RUN_TOGETHER);
@@ -787,8 +787,8 @@ function PlushSearch2()
 		if (!$pspell_link)
 			$pspell_link = pspell_new('en', '', '', '', PSPELL_FAST | PSPELL_RUN_TOGETHER);
 
-		error_reporting($old);
-		ob_end_clean();
+		//error_reporting($old);
+		//ob_end_clean();
 
 		$did_you_mean = array('search' => array(), 'display' => array());
 		$found_misspelling = false;

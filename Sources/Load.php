@@ -175,16 +175,17 @@ function reloadSettings()
 	$space_chars = $utf8 ? (@version_compare(PHP_VERSION, '4.3.3') != -1 ? '\x{A0}\x{AD}\x{2000}-\x{200F}\x{201F}\x{202F}\x{3000}\x{FEFF}' : "\xC2\xA0\xC2\xAD\xE2\x80\x80-\xE2\x80\x8F\xE2\x80\x9F\xE2\x80\xAF\xE2\x80\x9F\xE3\x80\x80\xEF\xBB\xBF") : '\x00-\x08\x0B\x0C\x0E-\x19\xA0';
 
 	$smcFunc += array(
-		'entity_fix' => create_function('$string', '
-			$num = substr($string, 0, 1) === \'x\' ? hexdec(substr($string, 1)) : (int) $string;
-			return $num < 0x20 || $num > 0x10FFFF || ($num >= 0xD800 && $num <= 0xDFFF) || $num === 0x202E || $num === 0x202D ? \'\' : \'&#\' . $num . \';\';'),
+		'entity_fix' => function($string) {
+			$num = substr($string, 0, 1) === 'x' ? hexdec(substr($string, 1)) : (int) $string;
+			return $num < 0x20 || $num > 0x10FFFF || ($num >= 0xD800 && $num <= 0xDFFF) || $num === 0x202E || $num === 0x202D ? '' : '&#' . $num . ';';
+		},
 		'htmlspecialchars' => create_function('$string, $quote_style = ENT_COMPAT, $charset = \'ISO-8859-1\'', '
 			global $smcFunc;
 			return ' . ($utf8 ? '$smcFunc[\'fix_utf8mb4\'](' : '') . strtr($ent_check[0], array('&' => '&amp;')) . 'htmlspecialchars($string, $quote_style, ' . ($utf8 ? '\'UTF-8\'' : '$charset') . ')' . $ent_check[1] . ($utf8 ? ')' : '') . ';'),
-		'fix_utf8mb4' => create_function('$string', '
+		'fix_utf8mb4' => function($string) {
 			$i = 0;
 			$len = strlen($string);
-			$new_string = \'\';
+			$new_string = '';
 			while ($i < $len)
 			{
 				$ord = ord($string[$i]);
@@ -210,11 +211,12 @@ function reloadSettings()
 					$val += (ord($string[$i+1]) & 0x3F) << 12;
 					$val += (ord($string[$i+2]) & 0x3F) << 6;
 					$val += (ord($string[$i+3]) & 0x3F);
-					$new_string .= \'&#\' . $val . \';\';
+					$new_string .= '&#' . $val . ';';
 					$i += 4;
 				}
 			}
-			return $new_string;'),
+			return $new_string;
+		},
 		'htmltrim' => create_function('$string', '
 			global $smcFunc;
 			return preg_replace(\'~^(?:[ \t\n\r\x0B\x00' . $space_chars . ']|&nbsp;)+|(?:[ \t\n\r\x0B\x00' . $space_chars . ']|&nbsp;)+$~' . ($utf8 ? 'u' : '') . '\', \'\', ' . implode('$string', $ent_check) . ');'),
