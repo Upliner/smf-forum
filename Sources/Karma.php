@@ -57,14 +57,17 @@ function ModifyKarma()
 	$dir = $_REQUEST['sa'] != 'applaud' ? -1 : 1;
 
 	// Delete any older items from the log. (karmaWaitTime is by hour.)
-	$smcFunc['db_query']('', '
+	/*$smcFunc['db_query']('', '
 		DELETE FROM {db_prefix}log_karma
 		WHERE {int:current_time} - log_time > {int:wait_time}',
 		array(
 			'wait_time' => (int) ($modSettings['karmaWaitTime'] * 3600),
 			'current_time' => time(),
 		)
-	);
+	);*/
+
+	if (!($_REQUEST['m'] > 0))
+		fatal_lang_error('karma_wait_time', false, array($modSettings['karmaWaitTime'], $txt['hours']));
 
 	// Start off with no change in karma.
 	$action = 0;
@@ -78,10 +81,12 @@ function ModifyKarma()
 			FROM {db_prefix}log_karma
 			WHERE id_target = {int:id_target}
 				AND id_executor = {int:current_member}
+				AND id_msg = {int:id_message}
 			LIMIT 1',
 			array(
 				'current_member' => $user_info['id'],
 				'id_target' => $_REQUEST['uid'],
+				'id_message' => $_REQUEST['m']
 			)
 		);
 		if ($smcFunc['db_num_rows']($request) > 0)
@@ -90,18 +95,31 @@ function ModifyKarma()
 	}
 
 	// They haven't, not before now, anyhow.
-	if (empty($action) || empty($modSettings['karmaWaitTime']))
+	if (empty($action) /*|| empty($modSettings['karmaWaitTime'])*/)
 	{
 		// Put it in the log.
 		$smcFunc['db_insert']('replace',
 				'{db_prefix}log_karma',
-				array('action' => 'int', 'id_target' => 'int', 'id_executor' => 'int', 'log_time' => 'int'),
-				array($dir, $_REQUEST['uid'], $user_info['id'], time()),
-				array('id_target', 'id_executor')
+				array('action' => 'int', 'id_target' => 'int', 'id_executor' => 'int', 'id_msg' => 'int', 'log_time' => 'int'),
+				array($dir, $_REQUEST['uid'], $user_info['id'], $_REQUEST['m'] , time()),
+				array('id_target', 'id_executor','id_msg')
 			);
 
 		// Change by one.
 		updateMemberData($_REQUEST['uid'], array($dir == 1 ? 'karma_good' : 'karma_bad' => '+'));
+		if (!empty($_REQUEST['m'])) {
+			// Change by one, message karma
+			$smcFunc['db_query']('', '
+				UPDATE {db_prefix}messages
+				SET '.($dir == 1 ? 'karma_good = karma_good' : 'karma_bad = karma_bad').' + 1
+				WHERE id_msg = {int:id_message}',
+				array(
+					'id_message' => $_REQUEST['m']
+				)
+			);
+		}
+
+
 	}
 	else
 	{
@@ -120,14 +138,40 @@ function ModifyKarma()
 				'action' => $dir,
 				'current_time' => time(),
 				'id_target' => $_REQUEST['uid'],
+				'id_msg' => $_REQUEST['m'],
 			)
 		);
 
 		// It was recently changed the OTHER way... so... reverse it!
-		if ($dir == 1)
+		if ($dir == 1) {
 			updateMemberData($_REQUEST['uid'], array('karma_good' => '+', 'karma_bad' => '-'));
-		else
+
+			if (!empty($_REQUEST['m'])) {
+				// Change by one, message karma
+				$smcFunc['db_query']('', '
+					UPDATE {db_prefix}messages
+					SET karma_good = karma_good + 1, karma_bad = karma_bad - 1
+					WHERE id_msg = {int:id_message}',
+					array(
+						'id_message' => $_REQUEST['m']
+					)
+				);
+			}
+		} else {
 			updateMemberData($_REQUEST['uid'], array('karma_bad' => '+', 'karma_good' => '-'));
+
+			if (!empty($_REQUEST['m'])) {
+				// Change by one, message karma
+				$smcFunc['db_query']('', '
+					UPDATE {db_prefix}messages
+					SET karma_good = karma_good - 1, karma_bad = karma_bad + 1
+					WHERE id_msg = {int:id_message}',
+					array(
+						'id_message' => $_REQUEST['m']
+					)
+				);
+			}
+		}
 	}
 
 	// Figure out where to go back to.... the topic?

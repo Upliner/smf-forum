@@ -151,6 +151,7 @@ $txt['showPosts'] = 'Просмотр сообщений';
 $txt['showPosts_help'] = 'В этом разделе можно просмотреть все сообщения, сделанные этим пользователем.';
 $txt['showMessages'] = 'Сообщения';
 $txt['showTopics'] = 'Темы';
+$txt['showKarma'] = 'Карма';
 $txt['showAttachments'] = 'Вложения';
 $txt['statPanel'] = 'Статистика';
 $txt['editBuddyIgnoreLists'] = 'Списки друзей и игнорируемых';

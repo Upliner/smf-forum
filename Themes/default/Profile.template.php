@@ -376,8 +376,7 @@ function template_showPosts()
 					</div>
 				</div>';
 
-			if ($post['can_reply'] || $post['can_mark_notify'] || $post['can_delete'])
-				echo '
+			echo '
 				<div class="floatright">
 					<ul class="reset smalltext quickbuttons">';
 
@@ -401,8 +400,11 @@ function template_showPosts()
 				echo '
 						<li class="remove_button"><a href="', $scripturl, '?action=deletemsg;msg=', $post['id'], ';topic=', $post['topic'], ';profile;u=', $context['member']['id'], ';start=', $context['start'], ';', $context['session_var'], '=', $context['session_id'], '" onclick="return confirm(\'', $txt['remove_message'], '?\');"><span>', $txt['remove'], '</span></a></li>';
 
-			if ($post['can_reply'] || $post['can_mark_notify'] || $post['can_delete'])
-				echo '
+			echo '
+						<li style="background: url(', $settings['images_url'], '/post/thumbup.gif) no-repeat 0 0;"><span style="padding-left:20px;display:block;height:20px;line-height:18px;float:left;">', $modSettings['karmaApplaudLabel'], $post['karma_good'], '</span></li>
+						<li style="background: url(', $settings['images_url'], '/post/thumbdown.gif) no-repeat 0 0;"><span style="padding-left:20px;display:block;height:20px;line-height:18px;float:left;">', $modSettings['karmaSmiteLabel'], $post['karma_bad'], '</span></li>';
+
+			echo '
 					</ul>
 				</div>';
 

@@ -264,6 +264,8 @@ function showPosts($memID)
 			),
 			'topics' => array(
 			),
+			'karma' => array(
+			),
 			'attach' => array(
 			),
 		),
@@ -281,7 +283,19 @@ function showPosts($memID)
 		return showAttachments($memID);
 
 	// Are we just viewing topics?
-	$context['is_topics'] = isset($_GET['sa']) && $_GET['sa'] == 'topics' ? true : false;
+	$context['is_topics'] = false;
+	$sa_part = '';
+	$karma_where = '';
+	switch ($_GET['sa'])
+	{
+		case 'topics':
+			$context['is_topics'] = true;
+			$sa_part = ';sa=topics';
+			break;
+		case 'karma':
+			$sa_part = ';sa=karma';
+			$karma_where = ' AND (m.karma_good>0 OR m.karma_bad > 0)';
+	}
 
 	// If just deleting a message, do it and then redirect back.
 	if (isset($_GET['delete']) && !$context['is_topics'])
@@ -341,7 +355,7 @@ function showPosts($memID)
 				INNER JOIN {db_prefix}boards AS b ON (b.id_board = m.id_board AND {query_see_board})') . '
 			WHERE m.id_member = {int:current_member}' . (!empty($board) ? '
 				AND m.id_board = {int:board}' : '') . (!$modSettings['postmod_active'] || $context['user']['is_owner'] ? '' : '
-				AND m.approved = {int:is_approved}'),
+				AND m.approved = {int:is_approved}') . $karma_where,
 			array(
 				'current_member' => $memID,
 				'is_approved' => 1,
@@ -356,7 +370,7 @@ function showPosts($memID)
 		FROM {db_prefix}messages AS m
 		WHERE m.id_member = {int:current_member}' . (!empty($board) ? '
 			AND m.id_board = {int:board}' : '') . (!$modSettings['postmod_active'] || $context['user']['is_owner'] ? '' : '
-			AND m.approved = {int:is_approved}'),
+			AND m.approved = {int:is_approved}') . $karma_where,
 		array(
 			'current_member' => $memID,
 			'is_approved' => 1,
@@ -371,7 +385,7 @@ function showPosts($memID)
 	$maxIndex = (int) $modSettings['defaultMaxMessages'];
 
 	// Make sure the starting place makes sense and construct our friend the page index.
-	$context['page_index'] = constructPageIndex($scripturl . '?action=profile;u=' . $memID . ';area=showposts' . ($context['is_topics'] ? ';sa=topics' : '') . (!empty($board) ? ';board=' . $board : ''), $context['start'], $msgCount, $maxIndex);
+	$context['page_index'] = constructPageIndex($scripturl . '?action=profile;u=' . $memID . ';area=showposts' . $sa_part . (!empty($board) ? ';board=' . $board : ''), $context['start'], $msgCount, $maxIndex);
 	$context['current_page'] = $context['start'] / $maxIndex;
 
 	// Reverse the query if we're past 50% of the pages for better performance.
@@ -431,7 +445,7 @@ function showPosts($memID)
 				SELECT
 					b.id_board, b.name AS bname, c.id_cat, c.name AS cname, m.id_topic, m.id_msg,
 					t.id_member_started, t.id_first_msg, t.id_last_msg, m.body, m.smileys_enabled,
-					m.subject, m.poster_time, m.approved
+					m.subject, m.poster_time, m.approved, m.karma_good, m.karma_bad
 				FROM {db_prefix}messages AS m
 					INNER JOIN {db_prefix}topics AS t ON (t.id_topic = m.id_topic)
 					INNER JOIN {db_prefix}boards AS b ON (b.id_board = t.id_board)
@@ -440,7 +454,7 @@ function showPosts($memID)
 					AND b.id_board = {int:board}' : '') . (empty($range_limit) ? '' : '
 					AND ' . $range_limit) . '
 					AND {query_see_board}' . (!$modSettings['postmod_active'] || $context['user']['is_owner'] ? '' : '
-					AND t.approved = {int:is_approved} AND m.approved = {int:is_approved}') . '
+					AND t.approved = {int:is_approved} AND m.approved = {int:is_approved}') . $karma_where . '
 				ORDER BY m.id_msg ' . ($reverse ? 'ASC' : 'DESC') . '
 				LIMIT ' . $start . ', ' . $maxIndex,
 				array(
@@ -489,6 +503,8 @@ function showPosts($memID)
 			'start' => 'msg' . $row['id_msg'],
 			'time' => timeformat($row['poster_time']),
 			'timestamp' => forum_time(true, $row['poster_time']),
+			'karma_good' => $row['karma_good'],
+			'karma_bad' => $row['karma_bad'],
 			'id' => $row['id_msg'],
 			'can_reply' => false,
 			'can_mark_notify' => false,

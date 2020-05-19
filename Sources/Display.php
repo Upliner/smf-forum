@@ -989,7 +989,7 @@ function Display()
 		$messages_request = $smcFunc['db_query']('', '
 			SELECT
 				id_msg, icon, subject, poster_time, poster_ip, id_member, modified_time, modified_name, body,
-				smileys_enabled, poster_name, poster_email, approved,
+				smileys_enabled, poster_name, poster_email, approved, karma_good, karma_bad,
 				id_msg_modified < {int:new_from} AS is_read
 			FROM {db_prefix}messages
 			WHERE id_msg IN ({array_int:message_list})
@@ -1203,6 +1203,11 @@ function prepareDisplayContext($reset = false)
 			'timestamp' => forum_time(true, $message['modified_time']),
 			'name' => $message['modified_name']
 		),
+		'karma' => array(
+			'good' => $message['karma_good'],
+			'bad' => $message['karma_bad'],
+		),
+
 		'body' => $message['body'],
 		'new' => empty($message['is_read']),
 		'approved' => $message['approved'],

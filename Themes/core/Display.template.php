@@ -259,12 +259,12 @@ function template_main()
 						<li class="margintop">', $modSettings['karmaLabel'], ' +', $message['member']['karma']['good'], '/-', $message['member']['karma']['bad'], '</li>';
 
 			// Is this user allowed to modify this member's karma?
-			if ($message['member']['karma']['allow'])
+			/*if ($message['member']['karma']['allow'])
 				echo '
 						<li>
 							<a href="', $scripturl, '?action=modifykarma;sa=applaud;uid=', $message['member']['id'], ';topic=', $context['current_topic'], '.' . $context['start'], ';m=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '">', $modSettings['karmaApplaudLabel'], '</a>
 							<a href="', $scripturl, '?action=modifykarma;sa=smite;uid=', $message['member']['id'], ';topic=', $context['current_topic'], '.', $context['start'], ';m=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '">', $modSettings['karmaSmiteLabel'], '</a>
-						</li>';
+						</li>';*/
 
 			// Show online and offline buttons?
 			if (!empty($modSettings['onlineEnable']))
@@ -393,7 +393,7 @@ function template_main()
 						</div>';
 
 		// If this is the first post, (#0) just say when it was posted - otherwise give the reply #.
-		if ($message['can_approve'] || $context['can_reply'] || $message['can_modify'] || $message['can_remove'] || $context['can_split'] || $context['can_restore_msg'])
+		//if ($message['can_approve'] || $context['can_reply'] || $message['can_modify'] || $message['can_remove'] || $context['can_split'] || $context['can_restore_msg'])
 			echo '
 						<ul class="reset smalltext postingbuttons">';
 
@@ -427,7 +427,17 @@ function template_main()
 			echo '
 							<li><a href="', $scripturl, '?action=splittopics;topic=', $context['current_topic'], '.0;at=', $message['id'], '">', $split_button, '</a></li>';
 
-		// Can we restore topics?
+		
+		// Karma Per Post
+		if ($message['member']['karma']['allow'])
+			echo '
+									<li style="background: url(', $settings['images_url'], '/post/thumbup.gif) no-repeat 0 0;"><a href="', $scripturl, '?action=modifykarma;sa=applaud;uid=', $message['member']['id'], ';topic=', $context['current_topic'], '.' . $context['start'], ';m=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '">', $modSettings['karmaApplaudLabel'], $message['karma']['good'], '</a></li>
+									<li style="background: url(', $settings['images_url'], '/post/thumbdown.gif) no-repeat 0 0;"><a href="', $scripturl, '?action=modifykarma;sa=smite;uid=', $message['member']['id'], ';topic=', $context['current_topic'], '.' . $context['start'], ';m=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '">', $modSettings['karmaSmiteLabel'], $message['karma']['bad'], '</a></li>';
+		else
+			echo '
+									<li style="background: url(', $settings['images_url'], '/post/thumbup.gif) no-repeat 0 0;"><span style="padding-left:20px;display:block;height:20px;line-height:18px;float:left;">', $modSettings['karmaApplaudLabel'], $message['karma']['good'], '</span></li>
+									<li style="background: url(', $settings['images_url'], '/post/thumbdown.gif) no-repeat 0 0;"><span style="padding-left:20px;display:block;height:20px;line-height:18px;float:left;">', $modSettings['karmaSmiteLabel'], $message['karma']['bad'], '</span></li>';
+// Can we restore topics?
 		if ($context['can_restore_msg'])
 			echo '
 							<li><a href="', $scripturl, '?action=restoretopic;msgs=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '">', $restore_message_button, '</a></li>';
@@ -437,7 +447,7 @@ function template_main()
 			echo '
 							<li style="display: none;" id="in_topic_mod_check_', $message['id'], '"></li>';
 
-		if ($message['can_approve'] || $context['can_reply'] || $message['can_modify'] || $message['can_remove'] || $context['can_split'] || $context['can_restore_msg'])
+		//if ($message['can_approve'] || $context['can_reply'] || $message['can_modify'] || $message['can_remove'] || $context['can_split'] || $context['can_restore_msg'])
 			echo '
 						</ul>';
 

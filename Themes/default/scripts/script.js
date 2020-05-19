@@ -140,6 +140,11 @@ String.prototype.oCharsetConversion = {
 // Convert a string to an 8 bit representation (like in PHP).
 String.prototype.php_to8bit = function ()
 {
+	for (var i = 0, iTextLen = this.length; i < iTextLen; i++)
+	{
+		if (this.charCodeAt(i)>127)
+			throw "Non-latin characters don't support client hashing";
+	}
 	if (smf_charset == 'UTF-8')
 	{
 		return this;

@@ -113,6 +113,7 @@ function ModifyProfile($post_errors = array())
 					'subsections' => array(
 						'messages' => array($txt['showMessages'], array('profile_view_own', 'profile_view_any')),
 						'topics' => array($txt['showTopics'], array('profile_view_own', 'profile_view_any')),
+						'karma' => array($txt['showKarma'], array('profile_view_own', 'profile_view_any')),
 						'attach' => array($txt['showAttachments'], array('profile_view_own', 'profile_view_any')),
 					),
 					'permission' => array(

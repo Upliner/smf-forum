@@ -151,6 +151,7 @@ $txt['showPosts'] = 'Show Posts';
 $txt['showPosts_help'] = 'This section allows you to view all posts made by this member. Note that you can only see posts made in areas you currently have access to.';
 $txt['showMessages'] = 'Messages';
 $txt['showTopics'] = 'Topics';
+$txt['showKarma'] = 'Karma';
 $txt['showAttachments'] = 'Attachments';
 $txt['statPanel'] = 'Show Stats';
 $txt['editBuddyIgnoreLists'] = 'Buddies/Ignore List';
