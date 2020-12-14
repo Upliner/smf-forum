@@ -18,6 +18,9 @@ if (!defined('SMF'))
 	new topics, quotes, and modifications to existing posts.  It also handles
 	quoting posts by way of javascript.
 
+	void filterNestedQuotes()
+		- removes nested quotes with nesting level more than $options["max_nested_quotes"]
+
 	void Post()
 		- handles showing the post screen, loading the post to be modified, and
 		  loading any post quoted.
@@ -79,6 +82,39 @@ if (!defined('SMF'))
 	void JavaScriptModify()
 		// !!!
 */
+
+function filterNestedQuotes(&$message) {
+	global $options;
+	$nesting_level = 0;
+	$message_new = "";
+	$offs = 0;
+	$max_level = intval($options["max_nested_quotes"]);
+	while ($offs<strlen($message)) {
+		preg_match('~(\n?\[quote.*?\])|(\[/quote\]\n?)~i', $message, $match, PREG_OFFSET_CAPTURE, $offs);
+		if (!$match)
+			break;
+		$new_offs = $match[0][1];
+		if ($nesting_level <= $max_level)
+			$message_new .= substr($message, $offs, $new_offs-$offs);
+
+		if (isset($match[1]) && $match[1][0]) {
+			if ($nesting_level == $max_level && strlen($message_new) > 0)
+				$message_new .= "\n";
+			$nesting_level++;
+		}
+
+		if ($nesting_level <= $max_level)
+			$message_new .= $match[0][0];
+
+		$offs = $new_offs + strlen($match[0][0]);
+
+		if (isset($match[2]) && $match[2][0])
+			$nesting_level--;
+	}
+	if ($offs>0) {
+		$message = $message_new . substr($message, $offs);
+	}
+}
 
 function Post()
 {
@@ -860,6 +896,8 @@ function Post()
 			// Remove any nested quotes, if necessary.
 			if (!empty($modSettings['removeNestedQuotes']))
 				$form_message = preg_replace(array('~\n?\[quote.*?\].+?\[/quote\]\n?~is', '~^\n~', '~\[/quote\]~'), '', $form_message);
+			else
+				filterNestedQuotes($form_message);
 
 			// Add a quote string on the front and end.
 			$form_message = '[quote author=' . $mname . ' link=topic=' . $topic . '.msg' . (int) $_REQUEST['quote'] . '#msg' . (int) $_REQUEST['quote'] . ' date=' . $mdate . ']' . "\n" . rtrim($form_message) . "\n" . '[/quote]';
@@ -2625,6 +2663,8 @@ function QuoteFast()
 		// Remove any nested quotes.
 		if (!empty($modSettings['removeNestedQuotes']))
 			$row['body'] = preg_replace(array('~\n?\[quote.*?\].+?\[/quote\]\n?~is', '~^\n~', '~\[/quote\]~'), '', $row['body']);
+		else
+			filterNestedQuotes($row['body']);
 
 		// Make the body HTML if need be.
 		if (!empty($_REQUEST['mode']))

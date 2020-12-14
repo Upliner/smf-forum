@@ -286,6 +286,7 @@ $txt['display_quick_reply1'] = 'don\'t show at all';
 $txt['display_quick_reply2'] = 'show, off by default';
 $txt['display_quick_reply3'] = 'show, on by default';
 $txt['display_quick_mod'] = 'Show quick-moderation as ';
+$txt['max_nested_quotes'] = 'Maximum nested quotes: ';
 $txt['display_quick_mod_none'] = 'don\'t show.';
 $txt['display_quick_mod_check'] = 'checkboxes.';
 $txt['display_quick_mod_image'] = 'icons.';

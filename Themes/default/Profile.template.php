@@ -1586,6 +1586,10 @@ function template_profile_theme_settings()
 									<option value="2"', !empty($context['member']['options']['display_quick_mod']) && $context['member']['options']['display_quick_mod'] != 1 ? ' selected="selected"' : '', '>', $txt['display_quick_mod_image'], '</option>
 								</select>
 							</li>
+							<li>
+								<label for="max_nested_quotes">', $txt['max_nested_quotes'], '</label>
+								<input name="default_options[max_nested_quotes]" id="max_nested_quotes" value="', intval($context['member']['options']['max_nested_quotes']), '"/>
+							</li>
 						</ul>
 						<dl>
 							<dd></dd>';

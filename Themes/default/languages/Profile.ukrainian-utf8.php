@@ -285,6 +285,7 @@ $txt['display_quick_reply'] = 'Форма швидкої відповіді: ';
 $txt['display_quick_reply1'] = 'не показувати';
 $txt['display_quick_reply2'] = 'включити за замовчуванням - згорнута';
 $txt['display_quick_reply3'] = 'включити за замовчуванням - розгорнута';
+$txt['max_nested_quotes'] = 'Максимум вкладених цитат: ';
 $txt['display_quick_mod'] = 'Показувати функції швидкого модерування ';
 $txt['display_quick_mod_none'] = 'не показувати';
 $txt['display_quick_mod_check'] = 'сотами';

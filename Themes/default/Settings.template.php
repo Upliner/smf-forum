@@ -140,6 +140,11 @@ function template_options()
 			'default' => true,
 		),
 		array(
+			'id' => 'max_nested_quotes',
+			'label' => $txt['max_nested_quotes'],
+			'default' => 0,
+		),
+		array(
 			'id' => 'display_quick_mod',
 			'label' => $txt['display_quick_mod'],
 			'options' => array(

@@ -285,6 +285,7 @@ $txt['display_quick_reply'] = 'Форма быстрого ответа: ';
 $txt['display_quick_reply1'] = 'не показывать';
 $txt['display_quick_reply2'] = 'по умолчанию свернута';
 $txt['display_quick_reply3'] = 'по умолчанию развернута';
+$txt['max_nested_quotes'] = 'Максимум вложенных цитат: ';
 $txt['display_quick_mod'] = 'Быстрое модерирование';
 $txt['display_quick_mod_none'] = 'отключить';
 $txt['display_quick_mod_check'] = 'в виде ячеек';
