@@ -1538,6 +1538,9 @@ function Post2()
 	if (isset($_POST['message']) && strtolower($_POST['message']) == 'i am the administrator.' && !$user_info['is_admin'])
 		fatal_error('Knave! Masquerader! Charlatan!', false);
 
+	if ($user_info['posts'] == 0 && preg_match("#https?://#", $_POST['message']))
+		fatal_error('URLs in unapproved posts are blocked by antispam system. Post anything without URLs first and wait until it will be approved.');
+
 	// Validate the poll...
 	if (isset($_REQUEST['poll']) && $modSettings['pollMode'] == '1')
 	{
