@@ -585,6 +585,34 @@ function loadUserSettings()
 		$user_info['query_wanna_see_board'] = '(' . $user_info['query_see_board'] . ' AND b.id_board NOT IN (' . implode(',', $user_info['ignoreboards']) . '))';
 }
 
+function getMsgTopic($msg) {
+	global $smcFunc;
+	// Looking through the message table can be slow, so try using the cache first.
+	if (($topic = cache_get_data('msg_topic-' . $msg, 120)) === NULL)
+	{
+		$request = $smcFunc['db_query']('', '
+			SELECT id_topic
+			FROM {db_prefix}messages
+			WHERE id_msg = {int:id_msg}
+			LIMIT 1',
+			array(
+				'id_msg' => $msg,
+			)
+		);
+
+		// So did it find anything?
+		if ($smcFunc['db_num_rows']($request))
+		{
+			list ($topic) = $smcFunc['db_fetch_row']($request);
+			$smcFunc['db_free_result']($request);
+			// Save save save.
+			cache_put_data('msg_topic-' . $msg, $topic, 120);
+		}
+		$smcFunc['db_free_result']($request);
+	}
+	return $topic;
+}
+
 // Check for moderators and see if they have access to the board.
 function loadBoard()
 {
@@ -603,29 +631,7 @@ function loadBoard()
 	{
 		// Make sure the message id is really an int.
 		$_REQUEST['msg'] = (int) $_REQUEST['msg'];
-
-		// Looking through the message table can be slow, so try using the cache first.
-		if (($topic = cache_get_data('msg_topic-' . $_REQUEST['msg'], 120)) === NULL)
-		{
-			$request = $smcFunc['db_query']('', '
-				SELECT id_topic
-				FROM {db_prefix}messages
-				WHERE id_msg = {int:id_msg}
-				LIMIT 1',
-				array(
-					'id_msg' => $_REQUEST['msg'],
-				)
-			);
-
-			// So did it find anything?
-			if ($smcFunc['db_num_rows']($request))
-			{
-				list ($topic) = $smcFunc['db_fetch_row']($request);
-				$smcFunc['db_free_result']($request);
-				// Save save save.
-				cache_put_data('msg_topic-' . $_REQUEST['msg'], $topic, 120);
-			}
-		}
+		$topic = getMsgTopic($_REQUEST['msg']);
 
 		// Remember redirection is the key to avoiding fallout from your bosses.
 		if (!empty($topic))
@@ -636,6 +642,12 @@ function loadBoard()
 			loadTheme();
 			fatal_lang_error('topic_gone', false);
 		}
+	} else if (!empty($topic) && substr($_REQUEST['start'], 0, 3) == 'msg' && !isset($_REQUEST['topicseen']) && !isset($_REQUEST['boardseen']) && !isset($_REQUEST['forcetopic']))
+	{
+		$msg = (int) substr($_REQUEST['start'], 3);
+		$newTopic = getMsgTopic($msg);
+		if ($newTopic != $topic)
+			redirectexit('topic=' . $newTopic . '.msg' . $msg . '#msg' . $msg);
 	}
 
 	// Load this board only if it is specified.
