@@ -156,9 +156,9 @@ $txt['more_attachments'] = 'Вкладення';
 // Don't use entities in the below string.
 $txt['more_attachments_error'] = 'Вибачите, Ви більше не можете додавати вкладення.';
 
-$txt['more_smileys'] = 'додаткові смайлы';
-$txt['more_smileys_title'] = 'Додаткові смайлы';
-$txt['more_smileys_pick'] = 'Додаткові смайлы';
+$txt['more_smileys'] = 'додаткові смайли';
+$txt['more_smileys_title'] = 'Додаткові смайли';
+$txt['more_smileys_pick'] = 'Додаткові смайли';
 $txt['more_smileys_close_window'] = 'Закрити вікно';
 
 $txt['error_new_reply'] = 'Увага - поки Ви набирали повідомлення, у темі з\'явилася нова відповідь. Ви можете змінити Ваше повідомлення.';
