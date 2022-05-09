@@ -8,7 +8,7 @@
  * @copyright 2011 Simple Machines
  * @license http://www.simplemachines.org/about/smf/license.php BSD
  *
- * @version 2.0.16
+ * @version 2.0.18
  */
 
 if (!defined('SMF'))
@@ -121,11 +121,9 @@ function setLoginCookie($cookie_length, $id, $password = '')
 		}
 	}
 
-	// Fallback option to support outdated mods. This will be removed in future versions!
-	$no_auth_secret = !empty($cookie_no_auth_secret) && !empty($modSettings['integrate_verify_user']);
-
 	// Ensure the cookie can't be forged.
-	if ($password !== '' && !$no_auth_secret)
+	// Note: $cookie_no_auth_secret is a fallback that will be removed in future versions!
+	if ($password !== '' && empty($cookie_no_auth_secret))
 		$password = hash_hmac('sha1', $password, get_auth_secret());
 
 	// Get the data and path to set it on.
@@ -543,7 +541,8 @@ function RequestMembers()
 
 		if (preg_match('~&#\d+;~', $row['real_name']) != 0)
 		{
-			$fixchar = function($n) {
+			$fixchar = function($n)
+			{
 				if ($n < 128)
 					return chr($n);
 				elseif ($n < 2048)

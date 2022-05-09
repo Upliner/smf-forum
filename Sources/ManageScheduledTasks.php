@@ -8,7 +8,7 @@
  * @copyright 2011 Simple Machines
  * @license http://www.simplemachines.org/about/smf/license.php BSD
  *
- * @version 2.0
+ * @version 2.0.18
  */
 
 if (!defined('SMF'))
@@ -457,7 +457,8 @@ function TaskLog()
 					'value' => $txt['scheduled_log_time_run'],
 				),
 				'data' => array(
-					'function' => function($rowData) {
+					'function' => function($rowData)
+					{
 						return timeformat($rowData['time_run'], true);
 					},
 				),

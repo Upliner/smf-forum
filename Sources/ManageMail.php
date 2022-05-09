@@ -8,7 +8,7 @@
  * @copyright 2011 Simple Machines
  * @license http://www.simplemachines.org/about/smf/license.php BSD
  *
- * @version 2.0
+ * @version 2.0.18
  */
 
 if (!defined('SMF'))
@@ -121,9 +121,9 @@ function BrowseMailQueue()
 					'value' => $txt['mailqueue_subject'],
 				),
 				'data' => array(
-					'function' => function($rowData) {
-						global $smcFunc;
-						return $smcFunc['strlen']($rowData['subject']) > 50 ? sprintf('%1$s...', htmlspecialchars($smcFunc['substr']($rowData['subject'], 0, 47))) : htmlspecialchars($rowData['subject']);
+					'function' => function($rowData) use ($smcFunc)
+					{
+						return $smcFunc['strlen']($rowData['subject']) > 50 ? sprintf('%1$s...', $smcFunc['htmlspecialchars']($smcFunc['substr']($rowData['subject'], 0, 47))) : $smcFunc['htmlspecialchars']($rowData['subject']);
 					},
 					'class' => 'smalltext',
 				),
@@ -155,9 +155,8 @@ function BrowseMailQueue()
 					'value' => $txt['mailqueue_priority'],
 				),
 				'data' => array(
-					'function' => function($rowData) {
-						global $txt;
-
+					'function' => function($rowData) use ($txt)
+					{
 						// We probably have a text label with your priority.
 						$txtKey = sprintf('mq_mpriority_%1$s', $rowData['priority']);
 
@@ -176,7 +175,8 @@ function BrowseMailQueue()
 					'value' => $txt['mailqueue_age'],
 				),
 				'data' => array(
-					'function' => function($rowData) {
+					'function' => function($rowData)
+					{
 						return time_since(time() - $rowData['time_sent']);
 					},
 					'class' => 'smalltext',
@@ -191,8 +191,9 @@ function BrowseMailQueue()
 					'value' => '<input type="checkbox" onclick="invertAll(this, this.form);" class="input_check" />',
 				),
 				'data' => array(
-					'function' => function($rowData) {
-						return '<input type="checkbox" name="delete[]" value="' . $rowData['id_mail'] . '" class="input_check" />';
+					'function' => function($rowData)
+					{
+						return '<input type="checkbox" name="delete[]" value="' . $rowData['id_mail'] . '">';
 					},
 					'class' => 'smalltext',
 				),
