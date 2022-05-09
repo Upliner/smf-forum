@@ -140,11 +140,6 @@ String.prototype.oCharsetConversion = {
 // Convert a string to an 8 bit representation (like in PHP).
 String.prototype.php_to8bit = function ()
 {
-	for (var i = 0, iTextLen = this.length; i < iTextLen; i++)
-	{
-		if (this.charCodeAt(i)>127)
-			throw "Non-latin characters don't support client hashing";
-	}
 	if (smf_charset == 'UTF-8')
 	{
 		var n, sReturn = '';
@@ -632,6 +627,17 @@ function smf_avatarResize()
 }
 
 
+function hasUnicode(str)
+{
+	for (var i = 0, iTextLen = str.length; i < iTextLen; i++)
+	{
+		if (str.charCodeAt(i)>127)
+			return True;
+	}
+	return False;
+}
+
+
 function hashLoginPassword(doForm, cur_session_id)
 {
 	// Compatibility.
@@ -643,6 +649,9 @@ function hashLoginPassword(doForm, cur_session_id)
 	// Are they using an email address?
 	if (doForm.user.value.indexOf('@') != -1)
 		return;
+
+	if (hasUnicode(doForm.user.value) || hasUnicode(doForm.passwrd.value))
+		return; // Workaround login problems on some browsers
 
 	// Unless the browser is Opera, the password will not save properly.
 	if (!('opera' in window))
