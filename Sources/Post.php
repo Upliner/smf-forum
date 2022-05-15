@@ -1579,6 +1579,9 @@ function Post2()
 	if ($user_info['posts'] == 0 && preg_match("#https?://#", $_POST['message']))
 		fatal_error('URLs in unapproved posts are blocked by antispam system. Post anything without URLs first and wait until it will be approved.');
 
+	if ($user_info['posts'] == 0 && preg_match('#(^|\s)(sex|porno?|pron)($|\s)#', $_POST['message']))
+		fatal_error('Sex and porn spamming is blocked by antispam system.');
+
 	// Validate the poll...
 	if (isset($_REQUEST['poll']) && $modSettings['pollMode'] == '1')
 	{

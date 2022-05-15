@@ -3,6 +3,8 @@ attachments/
 avatars/
 cache/
 upldata/
+test/
+upl/
 Settings*.php
 install*
 *.php~
