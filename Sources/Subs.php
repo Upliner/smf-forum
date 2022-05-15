@@ -2523,10 +2523,11 @@ function parsesmileys(&$message)
 		{
 			$smileyCode = '<img src="' . htmlspecialchars($modSettings['smileys_url'] . '/' . $user_info['smiley_set'] . '/' . $smileysto[$i]) . '" alt="' . strtr(htmlspecialchars($smileysfrom[$i], ENT_QUOTES), array(':' => '&#58;', '(' => '&#40;', ')' => '&#41;', '$' => '&#36;', '[' => '&#091;')). '" title="' . strtr(htmlspecialchars($smileysdescs[$i]), array(':' => '&#58;', '(' => '&#40;', ')' => '&#41;', '$' => '&#36;', '[' => '&#091;')) . '" class="smiley" />';
 
+			$escaped = str_replace("'", "&#39;", htmlspecialchars($smileysfrom[$i]));
 			$smileyPregReplacements[$smileysfrom[$i]] = $smileyCode;
-			$smileyPregReplacements[htmlspecialchars($smileysfrom[$i], ENT_QUOTES)] = $smileyCode;
+			$smileyPregReplacements[$escaped] = $smileyCode;
 			$searchParts[] = preg_quote($smileysfrom[$i], '~');
-			$searchParts[] = preg_quote(htmlspecialchars($smileysfrom[$i], ENT_QUOTES), '~');
+			$searchParts[] = preg_quote($escaped, '~');
 		}
 
 		$smileyPregSearch = '~(?<=[>:\?\.\s' . $non_breaking_space . '[\]()*\\\;]|^)(' . implode('|', $searchParts) . ')(?=[^[:alpha:]0-9]|$)~' . ($context['utf8'] ? 'u' : '');
