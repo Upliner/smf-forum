@@ -1376,6 +1376,18 @@ smc_Editor.prototype.endResize = function (oEvent)
 
 	return false;
 }
+//"
+function smc_upl_additional_symbols(divId, items, handler) {
+    d = document.getElementById(divId);
+    if (!d) return;
+    items.forEach((item) => {
+        a = document.createElement("a");
+        a.href = `javascript:${handler}('${item[1]}')`;
+        a.innerText = item[0];
+        d.appendChild(a);
+        d.append(" ");
+    });
+}
 
 // *** smc_SmileyBox class.
 function smc_SmileyBox(oOptions)

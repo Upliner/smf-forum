@@ -30,3 +30,10 @@
 	width: 100%;
 	padding: 0 2px;
 }
+
+.upl_additional_symbols
+{
+	font-size: 140%;
+	padding: 5px;
+	letter-spacing: 5px;
+}

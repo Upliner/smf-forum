@@ -399,6 +399,8 @@ function template_main()
 	if (!empty($context['smileys']['postform']) || !empty($context['smileys']['popup']))
 		echo '
 					<div id="smileyBox_message"></div>';
+	echo '
+				<div id="upl_additional_symbols" class="upl_additional_symbols"></div>';
 
 	echo '
 					', template_control_richedit($context['post_box_name'], 'smileyBox_message', 'bbcBox_message');
