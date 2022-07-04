@@ -34,10 +34,12 @@ function template_control_richedit($editor_id, $smileyContainer = null, $bbcCont
 					const c = String.fromCharCode(i);
 					symlist.push(["a" + c, c]);
 				}
-				for (let i = 0x300; i <= 0x30C; i++)
+				for (var i = 0x300; i <= 0x30C; i++)
 					addSym(i);
 				addSym(0x30F);
 				addSym(0x1DC4);
+				for (var i = 0x326; i <= 0x328; i++)
+					addSym(i);
 				smc_upl_additional_symbols("upl_additional_symbols", symlist, ', JavaScriptEscape('oEditorHandle_' . $editor_id . '.insertText') ,');';
 
 		// Show the smileys.

@@ -303,6 +303,11 @@ function ModifyRegistrationSettings($return_config = false)
 	// This is really quite wanting.
 	require_once($sourcedir . '/ManageServer.php');
 
+	// Test if mod StopSpammer is OK
+	require_once($sourcedir . '/StopSpammer.php');
+	$txt['stopspammer_ok'] = stopspammer_test_mod_ok();
+	$stopspammer_faildb_sub = $txt['stopspammer_faildb_sub'];
+
 	// Do we have at least default versions of the agreement and privacy policy?
 	$agreement = file_exists($boarddir . '/agreement.' . $language . '.txt') || file_exists($boarddir . '/agreement.txt');
 	$policy = !empty($modSettings['policy_' . $language]);
@@ -323,6 +328,20 @@ function ModifyRegistrationSettings($return_config = false)
 			array('large_text', 'coppaPost', 'subtext' => $txt['setting_coppaPost_desc']),
 			array('text', 'coppaFax'),
 			array('text', 'coppaPhone'),
+		// Stop Spammer
+		array('title', 'stopspammer_settings'),
+		$txt['stopspammer_ok'],
+		'',
+			array('check', 'stopspammer_enable', 'subtext' => $txt['stopspammer_enable_sub']),
+		array('desc', 'stopspammer_check_sub1'),
+			array('check', 'stopspammer_check_name'),
+			array('check', 'stopspammer_check_mail'),
+			array('check', 'stopspammer_check_ip'),
+		array('desc', 'stopspammer_check_sub2'),
+			array('select', 'stopspammer_faildb', array($txt['stopspammer_fail01'], $txt['stopspammer_fail02'], $txt['stopspammer_fail03']), 'subtext' => $stopspammer_faildb_sub),
+			array('check', 'stopspammer_show01', 'subtext' => $txt['stopspammer_show01_sub']),
+			array('text', 'stopspammer_api_key'),
+		array('desc', 'stopspammer_api_key_sub'),
 		'',
 			array('check', 'announcements_default', 'disabled' => empty($modSettings['allow_disableAnnounce']) || !empty($modSettings['force_gdpr']), 'value' => !empty($modSettings['force_gdpr']) ? 0 : (empty($modSettings['allow_disableAnnounce']) ? 1 : !empty($modSettings['announcements_default']))),
 	);

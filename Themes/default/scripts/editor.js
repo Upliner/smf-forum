@@ -1380,12 +1380,14 @@ smc_Editor.prototype.endResize = function (oEvent)
 function smc_upl_additional_symbols(divId, items, handler) {
     d = document.getElementById(divId);
     if (!d) return;
-    items.forEach((item) => {
+    items.forEach(function(item) {
         a = document.createElement("a");
-        a.href = `javascript:${handler}('${item[1]}')`;
+        a.href = "javascript:" + handler + "('" + item[1] + "')";
         a.innerText = item[0];
         d.appendChild(a);
-        d.append(" ");
+        try {
+            d.append(" ");
+        } catch (e) {}
     });
 }
 
