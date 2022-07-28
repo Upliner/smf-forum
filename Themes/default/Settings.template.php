@@ -145,6 +145,11 @@ function template_options()
 			'default' => 0,
 		),
 		array(
+			'id' => 'custom_font',
+			'label' => $txt['custom_font'],
+			'default' => '',
+		),
+		array(
 			'id' => 'display_quick_mod',
 			'label' => $txt['display_quick_mod'],
 			'options' => array(

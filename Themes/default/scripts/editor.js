@@ -1378,7 +1378,7 @@ smc_Editor.prototype.endResize = function (oEvent)
 }
 //"
 function smc_upl_additional_symbols(divId, items, handler) {
-    d = document.getElementById(divId);
+    var d = document.getElementById(divId);
     if (!d) return;
     items.forEach(function(item) {
         a = document.createElement("a");

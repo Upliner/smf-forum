@@ -40,6 +40,10 @@ function template_control_richedit($editor_id, $smileyContainer = null, $bbcCont
 				addSym(0x1DC4);
 				for (var i = 0x326; i <= 0x328; i++)
 					addSym(i);
+				addSym(0x313)
+				addSym(0x314)
+				addSym(0x342);
+				addSym(0x345);
 				smc_upl_additional_symbols("upl_additional_symbols", symlist, ', JavaScriptEscape('oEditorHandle_' . $editor_id . '.insertText') ,');';
 
 		// Show the smileys.

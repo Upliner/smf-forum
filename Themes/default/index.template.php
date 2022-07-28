@@ -99,6 +99,10 @@ function template_html_above()
 		echo '
 	<link rel="stylesheet" type="text/css" href="', $settings['theme_url'], '/css/rtl.css" />';
 
+	if (!empty($options['custom_font']))
+		echo '
+	<style>.inner{font-family:' . htmlspecialchars($options['custom_font']) . ';}</style>';
+
 	// Here comes the JavaScript bits!
 	echo '
 	<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/script.js?fin20"></script>

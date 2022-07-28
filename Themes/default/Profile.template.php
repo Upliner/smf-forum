@@ -1590,6 +1590,10 @@ function template_profile_theme_settings()
 								<label for="max_nested_quotes">', $txt['max_nested_quotes'], '</label>
 								<input name="default_options[max_nested_quotes]" id="max_nested_quotes" value="', intval($context['member']['options']['max_nested_quotes']), '"/>
 							</li>
+							<li>
+								<label for="custom_font">', $txt['custom_font'], '</label>
+								<input name="default_options[custom_font]" id="custom_font" value="', htmlspecialchars($context['member']['options']['custom_font']), '"/>
+							</li>
 						</ul>
 						<dl>
 							<dd></dd>';

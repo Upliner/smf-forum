@@ -267,8 +267,8 @@ function cleanRequest()
 		// A new magic variable to indicate we think this is command line.
 		$_SERVER['is_cli'] = true;
 	}
-	elseif (preg_match('~^((([1]?\d)?\d|2[0-4]\d|25[0-5])\.){3}(([1]?\d)?\d|2[0-4]\d|25[0-5])$~', $_SERVER['REMOTE_ADDR']) === 0)
-		$_SERVER['REMOTE_ADDR'] = 'unknown';
+	//elseif (preg_match('~^((([1]?\d)?\d|2[0-4]\d|25[0-5])\.){3}(([1]?\d)?\d|2[0-4]\d|25[0-5])$~', $_SERVER['REMOTE_ADDR']) === 0)
+	//	$_SERVER['REMOTE_ADDR'] = 'unknown';
 
 	// Try to calculate their most likely IP for those people behind proxies (And the like).
 	$_SERVER['BAN_CHECK_IP'] = $_SERVER['REMOTE_ADDR'];
@@ -328,8 +328,8 @@ function cleanRequest()
 	// Some final checking.
 	if (preg_match('~^((([1]?\d)?\d|2[0-4]\d|25[0-5])\.){3}(([1]?\d)?\d|2[0-4]\d|25[0-5])$~', $_SERVER['BAN_CHECK_IP']) === 0)
 		$_SERVER['BAN_CHECK_IP'] = '';
-	if ($_SERVER['REMOTE_ADDR'] == 'unknown')
-		$_SERVER['REMOTE_ADDR'] = '';
+	//if ($_SERVER['REMOTE_ADDR'] == 'unknown')
+	//	$_SERVER['REMOTE_ADDR'] = '';
 }
 
 // Adds slashes to the array/variable.  Uses two underscores to guard against overloading.

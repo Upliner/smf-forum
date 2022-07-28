@@ -5,7 +5,9 @@ cache/
 upldata/
 test/
 upl/
+player/
 Settings*.php
 install*
 *.php~
 /*.jpg
+*.patch
