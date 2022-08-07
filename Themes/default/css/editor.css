@@ -34,6 +34,12 @@
 .upl_additional_symbols
 {
 	font-size: 140%;
-	padding: 5px;
 	letter-spacing: 5px;
+}
+
+.upl_button
+{
+	border: 2px outset buttonborder;
+	text-decoration: none;
+	padding: 0 5px;
 }

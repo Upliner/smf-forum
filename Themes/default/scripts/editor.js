@@ -1378,17 +1378,73 @@ smc_Editor.prototype.endResize = function (oEvent)
 }
 //"
 function smc_upl_additional_symbols(divId, items, handler) {
-    var d = document.getElementById(divId);
+    d = document.getElementById(divId);
     if (!d) return;
-    items.forEach(function(item) {
-        a = document.createElement("a");
-        a.href = "javascript:" + handler + "('" + item[1] + "')";
-        a.innerText = item[0];
-        d.appendChild(a);
-        try {
-            d.append(" ");
-        } catch (e) {}
+    items.forEach(function(row) {
+        r = document.createElement("p");
+        row.forEach(function(item) {
+            a = document.createElement("a");
+            a.href = "javascript:" + handler + "('" + item[1] + "')";
+            a.innerText = item[0];
+            r.appendChild(a);
+            try {
+                r.append(" ");
+            } catch (e) {}
+        });
+        d.appendChild(r);
     });
+}
+
+function BetaCodeToGreek(text) {
+    var decoderConfig = {
+        autoFinalSigma: true,
+        jFinalSigma: true,
+        caseInsensitive: true
+    }
+    var decoder = new BetaCode.BetaCodeDecoder(decoderConfig)
+    return decoder.decode(text)
+}
+
+function processText(func, oTextHandle) {
+    if (!('selectionStart' in oTextHandle)) {
+        alert("Please select text to convert");
+        return;
+    }
+    replaceText(func(oTextHandle.value.substr(oTextHandle.selectionStart, oTextHandle.selectionEnd-oTextHandle.selectionStart)), oTextHandle);
+}
+
+function smc_upl_betacode(divId, oTextHandle) {
+    d = document.getElementById(divId);
+    /*btn = document.createElement("a");
+    btn.innerText = "Greek->BetaCode"
+    btn.href = "javascript:"
+    btn.className = "upl_button";
+    btn.onclick = function() { processText(BetaCode.greekToBetaCode, oTextHandle); };
+
+    d.appendChild(btn);
+    try {
+        d.append(" ");
+    } catch (e) {}*/
+
+    btn = document.createElement("a");
+    btn.innerText = "BetaCode->Greek"
+    btn.href = "javascript:"
+    btn.className = "upl_button";
+    btn.onclick = function() { processText(BetaCodeToGreek, oTextHandle); };
+
+    d.appendChild(btn);
+
+    try {
+        d.append(" ");
+    } catch (e) {}
+
+    btn = document.createElement("a");
+    btn.innerText = "Unicode NFC normalize"
+    btn.href = "javascript:"
+    btn.className = "upl_button";
+    btn.onclick = function() { processText(function(text) { return text.normalize("NFC"); }, oTextHandle); };
+
+    d.appendChild(btn);
 }
 
 // *** smc_SmileyBox class.

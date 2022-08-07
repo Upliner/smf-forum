@@ -1,0 +1,1 @@
+/var/www/lingvopolitics/Themes/default/scripts/beta-code2.js

@@ -1267,7 +1267,7 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 				'validate' => function (&$tag, &$data, $disabled)
 				{
 					$data = strtr($data, array('<br>' => ''));
-					if (strpos($data, 'http://') !== 0 && strpos($data, 'https://') !== 0)
+					if (strpos($data, 'http://') !== 0 && strpos($data, 'https://') !== 0 && strpos($data, 'data:') !== 0)
 						$data = 'http://' . $data;
 
 					$data = get_proxied_url($data);
@@ -1281,7 +1281,7 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 				'validate' => function (&$tag, &$data, $disabled)
 				{
 					$data = strtr($data, array('<br>' => ''));
-					if (strpos($data, 'http://') !== 0 && strpos($data, 'https://') !== 0)
+					if (strpos($data, 'http://') !== 0 && strpos($data, 'https://') !== 0 && strpos($data, 'data:') !== 0)
 						$data = 'http://' . $data;
 
 					$data = get_proxied_url($data);

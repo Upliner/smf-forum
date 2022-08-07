@@ -14,8 +14,8 @@ function template_main()
 {
 	global $context, $settings, $options, $txt, $scripturl, $modSettings;
 
-	echo '<table cellspacing="0px" cellpadding="20px" style="text-align: center; overflow: hidden; font-size: 120%; font-weight: bold; padding-left: 10%"><tr><td style="background-color: #005BBB; color: yellow">Ми з України. Ми робимо ці спільноти.</td></tr><tr>
-              <td style="background-color: #FFD500; color: black">&nbsp; Якщо хочете нам віддячити, <a text-decoration: underline" href="https://war.ukraine.ua/ru/podderzhyte-ukraynu/">підтримайте нашу країну</a>. &nbsp;
+	echo '<table cellspacing="0px" cellpadding="20px" style="text-align: center; overflow: hidden; font-size: 120%; font-weight: bold; padding-left: 5%"><tr><td style="background-color: #005BBB; color: yellow">Russia is waging a disgraceful war on Ukraine.</td></tr><tr>
+              <td style="background-color: #FFD500; color: black">Stand With Ukraine! <a text-decoration: underline" href="https://u24.gov.ua/">How you can support Ukraine</a>🇺🇦
               </td></tr></table><br/>
               ';
 

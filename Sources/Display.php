@@ -1088,6 +1088,17 @@ function Display()
 	}
 }
 
+function checkEditTime($message) {
+	global $modSettings, $user_info;
+	if ($message['id_member'] != $user_info['id'])
+		return false;
+	if ($user_info['id'] == 26 || $user_info['id'] == 7)
+		return $message['poster_time'] + 3600 >= time();
+	if (empty($modSettings['edit_disable_time']))
+		return true;
+	return $message['poster_time'] + $modSettings['edit_disable_time'] * 60 >= time();
+}
+
 // Callback for the message display.
 function prepareDisplayContext($reset = false)
 {
@@ -1139,7 +1150,7 @@ function prepareDisplayContext($reset = false)
 	$message['subject'] = $message['subject'] != '' ? $message['subject'] : $txt['no_subject'];
 
 	// Are you allowed to remove at least a single reply?
-	$context['can_remove_post'] |= allowedTo('delete_own') && (empty($modSettings['edit_disable_time']) || $message['poster_time'] + $modSettings['edit_disable_time'] * 60 >= time()) && $message['id_member'] == $user_info['id'];
+	$context['can_remove_post'] |= allowedTo('delete_own') && checkEditTime($message);
 
 	// If it couldn't load, or the user was a guest.... someday may be done with a guest table.
 	if (!loadMemberContext($message['id_member'], true))
@@ -1203,8 +1214,8 @@ function prepareDisplayContext($reset = false)
 		'is_ignored' => !empty($modSettings['enable_buddylist']) && !empty($options['posts_apply_ignore_list']) && in_array($message['id_member'], $context['user']['ignoreusers']),
 		'can_approve' => !$message['approved'] && $context['can_approve'],
 		'can_unapprove' => $message['approved'] && $context['can_approve'],
-		'can_modify' => (!$context['is_locked'] || allowedTo('moderate_board')) && (allowedTo('modify_any') || (allowedTo('modify_replies') && $context['user']['started']) || (allowedTo('modify_own') && $message['id_member'] == $user_info['id'] && (empty($modSettings['edit_disable_time']) || !$message['approved'] || $message['poster_time'] + $modSettings['edit_disable_time'] * 60 > time()))),
-		'can_remove' => allowedTo('delete_any') || (allowedTo('delete_replies') && $context['user']['started']) || (allowedTo('delete_own') && $message['id_member'] == $user_info['id'] && (empty($modSettings['edit_disable_time']) || $message['poster_time'] + $modSettings['edit_disable_time'] * 60 > time())),
+		'can_modify' => (!$context['is_locked'] || allowedTo('moderate_board')) && (allowedTo('modify_any') || (allowedTo('modify_replies') && $context['user']['started']) || (allowedTo('modify_own') && (checkEditTime($message) || !$message['approved']))),
+		'can_remove' => allowedTo('delete_any') || (allowedTo('delete_replies') && $context['user']['started']) || (allowedTo('delete_own') && checkEditTime($message)),
 		'can_see_ip' => allowedTo('moderate_forum') || ($message['id_member'] == $user_info['id'] && !empty($user_info['id'])),
 	);
 

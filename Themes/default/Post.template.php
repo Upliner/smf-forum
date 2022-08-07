@@ -394,6 +394,8 @@ function template_main()
 		echo '
 					<div id="bbcBox_message"></div>';
 	}
+	echo '
+				<div id="upl_betacode"></div>';
 
 	// What about smileys?
 	if (!empty($context['smileys']['postform']) || !empty($context['smileys']['popup']))

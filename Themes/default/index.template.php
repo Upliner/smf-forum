@@ -101,7 +101,7 @@ function template_html_above()
 
 	if (!empty($options['custom_font']))
 		echo '
-	<style>.inner{font-family:' . htmlspecialchars($options['custom_font']) . ';}</style>';
+	<style>.inner{font:' . htmlspecialchars($options['custom_font']) . ';}</style>';
 
 	// Here comes the JavaScript bits!
 	echo '

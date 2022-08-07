@@ -1953,6 +1953,7 @@ function loadTemplate($template_name, $style_sheets = array(), $fatal = true)
 			$context['debug']['templates'][] = $template_name . ' (' . basename($template_dir) . ')';
 
 		// If they have specified an initialization function for this template, go ahead and call it now.
+		//echo 'template_' . $template_name . '_init';
 		if (function_exists('template_' . $template_name . '_init'))
 			call_user_func('template_' . $template_name . '_init');
 	}

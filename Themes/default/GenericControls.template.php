@@ -11,6 +11,12 @@
  */
 
 // This function displays all the stuff you get with a richedit box - BBC, smileys etc.
+function template_GenericControls_init()
+{
+	global $context, $settings;
+	$context['html_headers'] .= '
+		<script type="text/javascript" src="' . $settings['default_theme_url'] . '/scripts/beta-code2.js?fin2"></script>';
+}
 function template_control_richedit($editor_id, $smileyContainer = null, $bbcContainer = null)
 {
 	global $context, $settings, $options, $txt, $modSettings, $scripturl;
@@ -29,7 +35,7 @@ function template_control_richedit($editor_id, $smileyContainer = null, $bbcCont
 		<input type="hidden" name="', $editor_id, '_mode" id="', $editor_id, '_mode" value="0" />
 		<script type="text/javascript"><!-- // --><![CDATA[';
 		echo '
-				symlist = [];
+				var symlist = [];
 				function addSym(i) {
 					const c = String.fromCharCode(i);
 					symlist.push(["a" + c, c]);
@@ -38,13 +44,16 @@ function template_control_richedit($editor_id, $smileyContainer = null, $bbcCont
 					addSym(i);
 				addSym(0x30F);
 				addSym(0x1DC4);
+				addSym(0x323)
 				for (var i = 0x326; i <= 0x328; i++)
 					addSym(i);
 				addSym(0x313)
 				addSym(0x314)
 				addSym(0x342);
 				addSym(0x345);
-				smc_upl_additional_symbols("upl_additional_symbols", symlist, ', JavaScriptEscape('oEditorHandle_' . $editor_id . '.insertText') ,');';
+				symlist = [symlist, "āīūēōšṣṭâîûêô".split("").map(function(a){ return [a, a]})];
+				smc_upl_additional_symbols("upl_additional_symbols", symlist, ', JavaScriptEscape('oEditorHandle_' . $editor_id . '.insertText') ,');
+';
 
 		// Show the smileys.
 		if ((!empty($context['smileys']['postform']) || !empty($context['smileys']['popup'])) && !$editor_context['disable_smiley_box'] && $smileyContainer !== null)
@@ -265,7 +274,10 @@ function template_control_richedit($editor_id, $smileyContainer = null, $bbcCont
 					oSmileyBox: ', !empty($context['smileys']['postform']) && !$editor_context['disable_smiley_box'] && $smileyContainer !== null ? 'oSmileyBox_' . $editor_id : 'null', ',
 					oBBCBox: ', $context['show_bbc'] && $bbcContainer !== null ? 'oBBCBox_' . $editor_id : 'null', '
 				});
-				smf_editorArray[smf_editorArray.length] = oEditorHandle_', $editor_id, ';';
+				smf_editorArray[smf_editorArray.length] = oEditorHandle_', $editor_id, ';
+
+				smc_upl_betacode("upl_betacode", oEditorHandle_', $editor_id, '.oTextHandle);
+';
 
 		echo '
 			// ]]></script>';

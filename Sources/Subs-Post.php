@@ -419,7 +419,7 @@ function fixTags(&$message)
 		// [img]http://...[/img] or [img width=1]http://...[/img]
 		array(
 			'tag' => 'img',
-			'protocols' => array('http', 'https'),
+			'protocols' => array('http', 'https', 'data'),
 			'embeddedUrl' => false,
 			'hasEqualSign' => false,
 			'hasExtra' => true,
@@ -589,8 +589,8 @@ function fixTag(&$message, $myTag, $protocols, $embeddedUrl = false, $hasEqualSi
 				$this_tag = 'iurl';
 				$this_close = 'iurl';
 			}
-			else
-				$replace = $protocols[0] . '://' . $replace;
+			//else
+			//	$replace = $protocols[0] . '://' . $replace;
 		}
 		elseif (!$found && $protocols[0] == 'ftp')
 			$replace = $protocols[0] . '://' . preg_replace('~^(?!ftps?)[^:]+://~', '', $replace);
