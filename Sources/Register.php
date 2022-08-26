@@ -409,10 +409,11 @@ function Register2($verifiedOpenID = false)
 		require_once($sourcedir . '/StopSpammer.php');
 		if ($regOptions['spammer'] = checkDBSpammer($user_info['ip'], $_POST['user'], $_POST['email']))
 		{
-			$regOptions['require'] = 'approval';
-			$modSettings['registration_method'] = 2;
+			//$regOptions['require'] = 'approval';
+			//$modSettings['registration_method'] = 2;
 			if ($regOptions['spammer'] != 8)
 				updateSettings(array('stopspammer_count' => ++$modSettings['stopspammer_count']), true);
+			fatal_lang_error('stopspammer_error');
 		}
 	}
 

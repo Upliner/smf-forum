@@ -2523,7 +2523,7 @@ function parsesmileys(&$message)
 		{
 			$smileyCode = '<img src="' . htmlspecialchars($modSettings['smileys_url'] . '/' . $user_info['smiley_set'] . '/' . $smileysto[$i]) . '" alt="' . strtr(htmlspecialchars($smileysfrom[$i], ENT_QUOTES), array(':' => '&#58;', '(' => '&#40;', ')' => '&#41;', '$' => '&#36;', '[' => '&#091;')). '" title="' . strtr(htmlspecialchars($smileysdescs[$i]), array(':' => '&#58;', '(' => '&#40;', ')' => '&#41;', '$' => '&#36;', '[' => '&#091;')) . '" class="smiley" />';
 
-			$escaped = str_replace("'", "&#39;", htmlspecialchars($smileysfrom[$i]));
+			$escaped = str_replace("&#039;", "&#39;", htmlspecialchars($smileysfrom[$i]));
 			$smileyPregReplacements[$smileysfrom[$i]] = $smileyCode;
 			$smileyPregReplacements[$escaped] = $smileyCode;
 			$searchParts[] = preg_quote($smileysfrom[$i], '~');
